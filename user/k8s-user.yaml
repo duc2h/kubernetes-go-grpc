@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-user-dpl
+  labels:
+    app: k8s-user
+spec:
+  selector:
+    matchLabels:
+      app: k8s-user
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: k8s-user
+    spec:
+      containers:
+        - name: k8s-user-containers
+          image: hoangduc02011998/k8s-go-grpc-user:v1.2
+          ports:
+            - name: k8s-user
+              containerPort: 8080
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-user-svc
+spec:
+  selector:
+    app: k8s-user
+  ports:
+    - name: http
+      port: 8080
+      nodePort: 30080
+  type: NodePort
